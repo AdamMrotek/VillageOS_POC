@@ -1,9 +1,9 @@
 # VillageOS — Phase 1 Implementation Design
 
-**Version:** 0.2  
-**Date:** 2026-04-29  
+**Version:** 0.3  
+**Date:** 2026-04-30  
 **Author:** Adam Mrotek  
-**Status:** In Progress — backend + frontend built, end-to-end tested with Ollama  
+**Status:** In Progress — backend + frontend built, model evaluation complete (see Section 10)  
 **Companion docs:** [PRD.md](./PRD.md) · [SYSTEM_DESIGN.md](./SYSTEM_DESIGN.md)
 
 ---
@@ -661,6 +661,66 @@ Phase 1 is complete when:
 - [x] No hardcoded values — all config via `.env` / `.env.local`
 - [ ] All 10 golden-dataset pytest tests pass
 - [ ] `confidence < 0.7` triggers escalation to `gpt-4o` (verify by checking `model_used` in response) — only testable with `LLM_PROVIDER=openai`
+
+---
+
+## 10. Model Evaluation — Phase 1 Live Testing
+
+**Date:** 2026-04-30  
+**Test input:** Stanley's May Day event (multi-section structured document with activities, refreshments, and ticket pricing)  
+**Evaluated dimensions:** speed, event_type accuracy, action_items extraction, token usage
+
+### Results
+
+| Model | Provider | Mode | Speed | `event_type` | `action_items` | Tokens |
+|---|---|---|---|---|---|---|
+| `qwen2.5:7b` | Ollama (local) | JSON | ~seconds | good | — | — |
+| `qwen3:4b` | Ollama (local) | TOOLS | ~2 min | ✅ correct | ❌ missed | 4,567 |
+| `qwen3:4b` | Ollama (local) | JSON | ~2 min | partial | partial | 6,124 |
+| `llama3.1:8b` | Ollama (local) | TOOLS | 4.7s | ❌ `birthday` | ❌ missed | 677 |
+| `llama-3.1-8b-instant` | Groq | TOOLS | 0.97s | ❌ `birthday` | ❌ missed | 891 |
+| `llama-3.1-8b-instant` | Groq | JSON | 0.88s | ❌ `birthday` | ❌ missed | 2,405 |
+| `llama-3.3-70b-versatile` | Groq | JSON | 0.42s | ✅ `other` | ❌ missed | 1,073 |
+| `llama-3.3-70b-versatile` | Groq | TOOLS | 0.57s | ✅ `other` | ❌ missed | 905 |
+| `gpt-4o-mini` | OpenAI | JSON | 2.4s | ✅ `other` | ❌ missed | 1,043 |
+| `gpt-4o-mini` | OpenAI | TOOLS | 3.6s | `fundraiser` | ✅ captured | 639 |
+
+### Key Findings
+
+1. **Local models are too slow for production** — Qwen3:4b took ~2 minutes even on a 4B model. Acceptable for offline dev only.
+2. **Groq is fastest** — `llama-3.3-70b-versatile` on Groq at 0.42–0.57s is the fastest result, faster than even the 8b model due to Groq's LPU hardware.
+3. **TOOLS mode is required for action_items** — No model in JSON mode captured nested `action_items`. Only `gpt-4o-mini` with TOOLS mode extracted ticket pricing. JSON mode doesn't enforce optional nested field population.
+4. **Model size matters more than mode for `event_type`** — 8b models consistently hallucinated `birthday` for "May Day". 70b models correctly classified as `other`.
+5. **Groq 70b + TOOLS is the sweet spot for production** — 0.57s, correct event_type, only weak point is action_items. `gpt-4o-mini` TOOLS captures action_items but is 6× slower.
+
+### Provider Config (Current)
+
+Update `backend/.env` to switch provider:
+
+```bash
+# Groq (fast, free tier)
+LLM_PROVIDER=groq
+GROQ_API_KEY=gsk_...
+
+# OpenAI (best action_items extraction)
+LLM_PROVIDER=openai
+OPENAI_API_KEY=sk-...
+
+# Local dev (no API key needed)
+LLM_PROVIDER=ollama
+```
+
+Model pairs per provider (fast → smart on confidence < 0.7):
+
+| Provider | Fast model | Smart model |
+|---|---|---|
+| Ollama | `llama3.1:8b` | `llama3.1:8b` |
+| Groq | `llama-3.3-70b-versatile` | `llama-3.3-70b-versatile` |
+| OpenAI | `gpt-4o-mini` | `gpt-4o` |
+
+### Recommendation for Golden Dataset Tests
+
+Run the 10 golden dataset tests against `gpt-4o-mini` + TOOLS mode (OpenAI) as the reference provider. This produced the best structured output quality. Use Groq as the speed-optimised alternative once action_items extraction is validated via prompt tuning.
 
 ---
 

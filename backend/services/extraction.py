@@ -12,6 +12,11 @@ from the text provided. Rules:
   Today is {today}.
 - If you cannot determine a required field with confidence, set confidence < 0.7.
 - Never invent details not present in the text.
+- For action_items, extract every concrete thing a parent must do, bring, or pay.
+  Examples: buying tickets, bringing a specific item, paying a fee, signing a form.
+  Set cost_estimate_gbp if a price in GBP is explicitly mentioned for that item.
+- For description, write one sentence summarising what the event is and what makes it
+  notable — theme, activities, or purpose. Do not just repeat the event name.
 """.strip()
 
 _client = None
@@ -28,10 +33,15 @@ def _get_client():
     if _provider == "ollama":
         _client = instructor.from_openai(
             AsyncOpenAI(base_url="http://localhost:11434/v1", api_key="ollama"),
-            mode=instructor.Mode.JSON,
+            mode=instructor.Mode.TOOLS,
+        )
+    elif _provider == "groq":
+        _client = instructor.from_openai(
+            AsyncOpenAI(base_url="https://api.groq.com/openai/v1", api_key=os.getenv("GROQ_API_KEY")),
+            mode=instructor.Mode.TOOLS,
         )
     else:
-        _client = instructor.from_openai(AsyncOpenAI())
+        _client = instructor.from_openai(AsyncOpenAI(), mode=instructor.Mode.JSON)
 
     return _client, _provider
 
@@ -40,7 +50,9 @@ def _models() -> tuple[str, str]:
     """Return (fast_model, smart_model) for the current provider."""
     _, provider = _get_client()
     if provider == "ollama":
-        return "qwen2.5:7b", "qwen2.5:7b"
+        return "llama3.1:8b", "llama3.1:8b"
+    if provider == "groq":
+        return "llama-3.3-70b-versatile", "llama-3.3-70b-versatile"
     return "gpt-4o-mini", "gpt-4o"
 
 
@@ -69,7 +81,7 @@ async def extract_event(raw_text: str) -> ExtractResponse:
             response_model=ParentEvent,
             max_retries=2,
             messages=messages,
-        )
+            )
 
     return ExtractResponse(
         event=response,
