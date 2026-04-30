@@ -29,3 +29,30 @@ export interface ExtractResponse {
   model_used: string;
   tokens_used: number;
 }
+
+export interface Provider {
+  id: string;
+  name: string;
+  category: string;
+  city: string;
+  description: string;
+  contact_email?: string | null;
+  website?: string | null;
+  age_range_min?: number | null;
+  age_range_max?: number | null;
+  tags: string[];
+  price_indicator?: string | null;
+  noise_level?: string | null;
+}
+
+export interface ProviderResult {
+  provider: Provider;
+  relevance_score: number;
+}
+
+export interface ProviderSearchResponse {
+  results: ProviderResult[];
+  synthesis: string;
+  model_used: string;
+  tokens_used: number;
+}

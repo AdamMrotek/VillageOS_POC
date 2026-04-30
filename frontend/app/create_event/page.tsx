@@ -11,10 +11,6 @@ export default function CreateEventPage() {
 
   return (
     <div className="min-h-screen bg-zinc-50 dark:bg-zinc-950">
-      <header className="border-b bg-white dark:bg-zinc-900 px-6 py-4">
-        <h1 className="text-lg font-semibold tracking-tight">VillageOS</h1>
-      </header>
-
       <main className="max-w-5xl mx-auto px-6 py-10">
         <div className="flex flex-col md:flex-row gap-8">
           <section className="flex-1 space-y-3">
