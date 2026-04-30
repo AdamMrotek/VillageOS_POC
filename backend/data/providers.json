@@ -1,0 +1,103 @@
+[
+  {
+    "id": "p001",
+    "name": "Chessington World of Adventures",
+    "category": "birthday_venue",
+    "city": "Kingston",
+    "description": "Theme park with rides and animal experiences. Offers birthday party packages for groups. Very popular with children aged 4–12. Can be loud and busy on weekends.",
+    "website": "https://www.chessington.com",
+    "age_range_min": 3,
+    "age_range_max": 14,
+    "tags": ["birthday", "outdoor", "theme-park", "groups"],
+    "price_indicator": "£££",
+    "noise_level": "loud"
+  },
+  {
+    "id": "p002",
+    "name": "The Clay Room Kingston",
+    "category": "birthday_venue",
+    "city": "Kingston",
+    "description": "Pottery painting studio offering calm, creative birthday parties. Children paint ceramics and take them home fired. Ideal for smaller groups who prefer a quieter activity.",
+    "website": "https://www.theclayroom.co.uk",
+    "age_range_min": 4,
+    "age_range_max": 12,
+    "tags": ["birthday", "creative", "quiet", "indoor", "arts-crafts"],
+    "price_indicator": "££",
+    "noise_level": "quiet"
+  },
+  {
+    "id": "p003",
+    "name": "Kingston Gymnastics Club",
+    "category": "sports_club",
+    "city": "Kingston",
+    "description": "Recreational and competitive gymnastics for children from age 3. Weekly classes plus holiday camps. Birthday parties in the gym available on Sundays.",
+    "website": "https://www.kingstongym.co.uk",
+    "age_range_min": 3,
+    "age_range_max": 16,
+    "tags": ["gymnastics", "sport", "birthday", "classes", "holiday-camp"],
+    "price_indicator": "££",
+    "noise_level": "moderate"
+  },
+  {
+    "id": "p004",
+    "name": "Surbiton Racket & Fitness Club",
+    "category": "sports_club",
+    "city": "Kingston",
+    "description": "Tennis, squash, and fitness club with junior coaching programmes. Mini tennis for ages 4–8, full junior programme for ages 8+. Family-friendly atmosphere.",
+    "age_range_min": 4,
+    "age_range_max": 18,
+    "tags": ["tennis", "sport", "junior", "coaching"],
+    "price_indicator": "££",
+    "noise_level": "moderate"
+  },
+  {
+    "id": "p005",
+    "name": "All Saints' Church of England Primary School",
+    "category": "school",
+    "city": "Kingston",
+    "description": "Ofsted 'Outstanding' Church of England primary school in Kingston town centre. PTA runs regular events including bake sales, fairs, and sports days.",
+    "age_range_min": 4,
+    "age_range_max": 11,
+    "tags": ["school", "primary", "church-of-england", "pta"],
+    "price_indicator": "£",
+    "noise_level": "moderate"
+  },
+  {
+    "id": "p006",
+    "name": "Hobbledown Heath Farm Park",
+    "category": "birthday_venue",
+    "city": "Kingston",
+    "description": "Farm park with animals, play areas, and adventure zones. Birthday party packages include a dedicated party room and farm trail. Good for energetic young children.",
+    "website": "https://www.hobbledown.com",
+    "age_range_min": 2,
+    "age_range_max": 10,
+    "tags": ["birthday", "farm", "outdoor", "animals", "adventure"],
+    "price_indicator": "££",
+    "noise_level": "moderate"
+  },
+  {
+    "id": "p007",
+    "name": "Little Kickers Kingston",
+    "category": "sports_club",
+    "city": "Kingston",
+    "description": "Football coaching franchise for pre-school and primary age children. Fun, non-competitive sessions focused on fundamentals and confidence. Age groups: 18 months to 7 years.",
+    "website": "https://www.littlekickers.co.uk",
+    "age_range_min": 1,
+    "age_range_max": 7,
+    "tags": ["football", "sport", "toddler", "pre-school", "coaching"],
+    "price_indicator": "£",
+    "noise_level": "moderate"
+  },
+  {
+    "id": "p008",
+    "name": "Richmond Park Café — Events Lawn",
+    "category": "birthday_venue",
+    "city": "Kingston",
+    "description": "Outdoor party space adjacent to Richmond Park café. Suitable for informal picnic-style birthday parties. Open air, very quiet, no package — bring your own food and decorations.",
+    "age_range_min": 1,
+    "age_range_max": 99,
+    "tags": ["birthday", "outdoor", "picnic", "quiet", "free", "nature"],
+    "price_indicator": "£",
+    "noise_level": "quiet"
+  }
+]

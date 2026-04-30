@@ -76,6 +76,41 @@ class ParentEvent(BaseModel):
         return self
 
 
+class Provider(BaseModel):
+    id: str
+    name: str
+    category: str
+    city: str
+    description: str
+    contact_email: Optional[str] = None
+    website: Optional[str] = None
+    age_range_min: Optional[int] = None
+    age_range_max: Optional[int] = None
+    tags: list[str] = []
+    price_indicator: Optional[str] = None
+    noise_level: Optional[str] = None
+
+
+class ProviderResult(BaseModel):
+    provider: Provider
+    relevance_score: float
+
+
+class ProviderSearchRequest(BaseModel):
+    query: str = Field(..., min_length=5, max_length=500)
+    city: Optional[str] = "Kingston"
+    limit: int = Field(default=3, ge=1, le=10)
+
+
+class ProviderSearchResponse(BaseModel):
+    model_config = ConfigDict(protected_namespaces=())
+
+    results: list[ProviderResult]
+    synthesis: str
+    model_used: str
+    tokens_used: int
+
+
 class ExtractRequest(BaseModel):
     raw_text: str = Field(..., min_length=10, max_length=8000)
 
