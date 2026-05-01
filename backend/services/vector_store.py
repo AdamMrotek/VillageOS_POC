@@ -30,26 +30,49 @@ def _get_collection():
     return _collection
 
 
-def upsert_provider(provider: Provider) -> None:
-    col = _get_collection()
-    doc = f"{provider.name} {provider.category} {provider.description} {' '.join(provider.tags)}"
-    col.upsert(
-        ids=[provider.id],
-        documents=[doc],
-        metadatas=[{
-            "city": provider.city,
-            "category": provider.category,
-            "name": provider.name,
-            "description": provider.description,
-            "tags": ",".join(provider.tags),
-            "age_range_min": provider.age_range_min if provider.age_range_min is not None else -1,
-            "age_range_max": provider.age_range_max if provider.age_range_max is not None else -1,
-            "price_indicator": provider.price_indicator or "",
-            "noise_level": provider.noise_level or "",
-            "website": provider.website or "",
-            "contact_email": provider.contact_email or "",
-        }],
+def _build_document(provider: Provider, vibe_description: str = "") -> str:
+    """
+    Vibe description leads (drives semantic matching); factual name + description
+    follow so keyword searches (e.g. "pottery", "football") still work.
+    """
+    parts: list[str] = []
+    if vibe_description:
+        parts.append(vibe_description)
+    parts.append(
+        f"{provider.name} — {provider.category.replace('_', ' ')} in {provider.city}. "
+        f"{provider.description}"
     )
+    return "\n\n".join(parts)
+
+
+def upsert_provider(
+    provider: Provider,
+    vibe_description: str = "",
+    tags: dict[str, list[str]] | None = None,
+) -> None:
+    col = _get_collection()
+    doc = _build_document(provider, vibe_description)
+
+    metadata: dict = {
+        "city":           provider.city,
+        "name":           provider.name,
+        "category":       provider.category,
+        "description":    provider.description,
+        "tags":           ",".join(provider.tags),
+        "age_range_min":  provider.age_range_min if provider.age_range_min is not None else -1,
+        "age_range_max":  provider.age_range_max if provider.age_range_max is not None else -1,
+        "price_indicator": provider.price_indicator or "",
+        "noise_level":    provider.noise_level or "",
+        "website":        provider.website or "",
+        "contact_email":  provider.contact_email or "",
+        "vibe_description": vibe_description,
+    }
+
+    # Store taxonomy tags as flat comma-separated strings for Python-side filtering
+    for tag_name, values in (tags or {}).items():
+        metadata[f"tag_{tag_name}"] = ",".join(values)
+
+    col.upsert(ids=[provider.id], documents=[doc], metadatas=[metadata])
 
 
 def query_providers(query: str, city_filter: str | None, limit: int) -> list[dict]:
@@ -63,7 +86,6 @@ def query_providers(query: str, city_filter: str | None, limit: int) -> list[dic
     )
     out = []
     for meta, dist in zip(results["metadatas"][0], results["distances"][0]):
-        # cosine distance → similarity score
         score = max(0.0, 1.0 - dist)
         out.append({"metadata": meta, "score": score})
     return out

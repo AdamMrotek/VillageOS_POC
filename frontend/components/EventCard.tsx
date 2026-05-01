@@ -83,8 +83,8 @@ export function EventCard({ event, modelUsed, tokensUsed }: EventCardProps) {
           <div>
             <p className="text-sm font-medium mb-1">Action items</p>
             <ul className="space-y-1">
-              {event.action_items.map((item) => (
-                <li key={item.description} className="text-sm flex items-start gap-1">
+              {event.action_items.map((item, i) => (
+                <li key={`${i}-${item.description}`} className="text-sm flex items-start gap-1">
                   <span className="mt-0.5">·</span>
                   <span>
                     {item.description}

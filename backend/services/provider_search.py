@@ -1,7 +1,7 @@
-import os
 from openai import OpenAI
 from backend.schemas import Provider, ProviderResult, ProviderSearchResponse
 from backend.services.vector_store import query_providers
+from backend.services.query_expander import expand_query
 
 _client = OpenAI()
 _MODEL = "gpt-4o-mini"
@@ -14,40 +14,59 @@ _SYSTEM_PROMPT = (
 )
 
 
+def _passes_tag_filter(metadata: dict, required_tags: dict[str, list[str]]) -> bool:
+    for tag_name, required_values in required_tags.items():
+        stored = metadata.get(f"tag_{tag_name}", "")
+        stored_values = {v.strip() for v in stored.split(",") if v.strip()}
+        if not any(v in stored_values for v in required_values):
+            return False
+    return True
+
+
+def _build_provider(meta: dict, score: float) -> ProviderResult:
+    tags = [t for t in meta.get("tags", "").split(",") if t]
+    provider = Provider(
+        id="",
+        name=meta["name"],
+        category=meta["category"],
+        city=meta["city"],
+        description=meta["description"],
+        website=meta.get("website") or None,
+        contact_email=meta.get("contact_email") or None,
+        age_range_min=meta["age_range_min"] if meta.get("age_range_min", -1) != -1 else None,
+        age_range_max=meta["age_range_max"] if meta.get("age_range_max", -1) != -1 else None,
+        tags=tags,
+        price_indicator=meta.get("price_indicator") or None,
+        noise_level=meta.get("noise_level") or None,
+    )
+    return ProviderResult(provider=provider, relevance_score=score)
+
+
 def search_providers(query: str, city: str | None, limit: int) -> ProviderSearchResponse:
-    raw = query_providers(query, city, limit)
+    # Step 1: expand query into vibe description + extract hard tag constraints
+    expanded = expand_query(query)
 
-    results: list[ProviderResult] = []
-    context_lines: list[str] = []
+    # Step 2: vector search using the expanded vibe description
+    candidates = query_providers(expanded.expanded, city, limit=20)
 
-    for item in raw:
-        m = item["metadata"]
-        tags = [t for t in m.get("tags", "").split(",") if t]
-        provider = Provider(
-            id="",
-            name=m["name"],
-            category=m["category"],
-            city=m["city"],
-            description=m["description"],
-            website=m.get("website") or None,
-            contact_email=m.get("contact_email") or None,
-            age_range_min=m["age_range_min"] if m.get("age_range_min", -1) != -1 else None,
-            age_range_max=m["age_range_max"] if m.get("age_range_max", -1) != -1 else None,
-            tags=tags,
-            price_indicator=m.get("price_indicator") or None,
-            noise_level=m.get("noise_level") or None,
-        )
-        results.append(ProviderResult(provider=provider, relevance_score=item["score"]))
-        context_lines.append(
-            f"Provider: {provider.name}\n"
-            f"Category: {provider.category}\n"
-            f"Description: {provider.description}\n"
-            f"Tags: {', '.join(provider.tags)}\n"
-            f"Noise level: {provider.noise_level or 'unknown'}\n"
-            f"Price: {provider.price_indicator or 'unknown'}\n"
-        )
+    # Step 3: hard filter by required tags; fall back to unfiltered if nothing passes
+    filtered = [c for c in candidates if _passes_tag_filter(c["metadata"], expanded.required_tags)]
+    if not filtered:
+        print("[tag filter] no results after filtering — falling back to unfiltered")
+        filtered = candidates
 
-    context = "\n".join(context_lines)
+    top = filtered[:limit]
+
+    results: list[ProviderResult] = [_build_provider(item["metadata"], item["score"]) for item in top]
+
+    context = "\n".join(
+        f"Provider: {r.provider.name}\n"
+        f"Description: {r.provider.description}\n"
+        f"Tags: {', '.join(r.provider.tags)}\n"
+        f"Noise level: {r.provider.noise_level or 'unknown'}\n"
+        f"Price: {r.provider.price_indicator or 'unknown'}\n"
+        for r in results
+    )
     user_msg = f"Query: {query}\n\nProviders:\n{context}"
 
     response = _client.chat.completions.create(
