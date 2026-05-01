@@ -30,7 +30,7 @@ export default function SearchPage() {
 
     try {
       const response = await searchProviders(trimmed);
-      setHistory((prev) => [...prev, { id: nextId.current++, query: trimmed, response }]);
+      setHistory((prev) => [{ id: nextId.current++, query: trimmed, response }, ...prev]);
       setQuery("");
       inputRef.current?.focus();
     } catch (err) {
