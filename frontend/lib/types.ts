@@ -24,6 +24,10 @@ export interface ParentEvent {
   confidence: number;
 }
 
+export interface StoredEvent extends ParentEvent {
+  id: string;
+}
+
 export interface ExtractResponse {
   event: ParentEvent;
   model_used: string;

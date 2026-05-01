@@ -1,4 +1,4 @@
-import type { ExtractResponse, ProviderSearchResponse } from "@/lib/types";
+import type { ExtractResponse, ProviderSearchResponse, StoredEvent } from "@/lib/types";
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
 
@@ -14,6 +14,21 @@ export async function extractEvent(rawText: string): Promise<ExtractResponse> {
     throw new Error(err.detail ?? "Extraction failed");
   }
 
+  return res.json();
+}
+
+export async function getEvents(
+  fromDate?: string,
+  toDate?: string,
+): Promise<StoredEvent[]> {
+  const params = new URLSearchParams();
+  if (fromDate) params.set("from_date", fromDate);
+  if (toDate) params.set("to_date", toDate);
+  const qs = params.toString();
+  const res = await fetch(`${BASE_URL}/api/v1/events${qs ? `?${qs}` : ""}`, {
+    cache: "no-store",
+  });
+  if (!res.ok) throw new Error(await res.text());
   return res.json();
 }
 

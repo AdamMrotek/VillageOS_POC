@@ -111,6 +111,10 @@ class ProviderSearchResponse(BaseModel):
     tokens_used: int
 
 
+class StoredEvent(ParentEvent):
+    id: str
+
+
 class ExtractRequest(BaseModel):
     raw_text: str = Field(..., min_length=10, max_length=8000)
 

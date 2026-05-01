@@ -34,6 +34,9 @@ export default function RootLayout({
             VillageOS
           </Link>
           <nav className="flex gap-4 text-sm text-muted-foreground">
+            <Link href="/calendar" className="hover:text-foreground transition-colors">
+              Calendar
+            </Link>
             <Link href="/create_event" className="hover:text-foreground transition-colors">
               Extract event
             </Link>
