@@ -189,10 +189,8 @@ Then in Claude Desktop: *"What events do I have this week?"* → Claude calls `g
 | Decision | Chosen | Why |
 |----------|--------|-----|
 | Calendar library | Custom Tailwind grid | FullCalendar is Phase 4; a simple grid is 50 lines and has zero dependencies |
-| Event storage | In-memory seed | PostgreSQL persistence is Phase 4; PoC goal is to prove the calendar + MCP flow |
-| MCP transport | stdio | Simplest for local dev; SSE transport for deployed Phase 4 |
-| MCP language | TypeScript | Matches Anthropic's documented MCP server examples |
-| Upcoming window default | 7 days | Matches the UI timeline; configurable via `days` param |
+| Event storage | In-memory seed | PostgreSQL persistence is Phase 4; PoC goal is to prove the calendar flow |
+| **MCP server** | **Removed from scope** | See section 7 |
 
 ---
 
@@ -200,6 +198,48 @@ Then in Claude Desktop: *"What events do I have this week?"* → Claude calls `g
 
 1. Replace in-memory store with Supabase PostgreSQL + persist confirmed events from the extraction flow.
 2. Add `POST /api/v1/events` so the extract-and-confirm flow saves events to the store.
-3. Add `get_free_slots` MCP tool (requires knowing the parent's working hours as context).
-4. Deploy MCP server to Railway as a standalone Node.js service with SSE transport.
-5. Add drag-and-drop event editing on the calendar (requires FullCalendar or a comparable lib).
+3. Add drag-and-drop event editing on the calendar (requires FullCalendar or a comparable lib).
+
+---
+
+## 7. MCP Server — Removed from Scope
+
+**Decision (Phase 3 discovery):** The MCP server deliverable has been cut. Do not carry it into Phase 4.
+
+### Reason 1 — Indirect prompt injection
+
+VillageOS aggregates data from untrusted external sources: school emails, newsletters, third-party calendars, and events entered by multiple parties. Any of these can be weaponised.
+
+Attack vector:
+```
+Malicious actor crafts a calendar event with embedded instructions
+    → content enters VillageOS via extraction, shared calendar, or imported newsletter
+    → parent asks their Claude instance "what do I have this week?"
+    → MCP server returns poisoned event data as tool output
+    → Claude executes the embedded instructions on the parent's behalf
+```
+
+The attacker never needs access to the parent's AI — they only need to influence what ends up in the data source. Because VillageOS is specifically designed to ingest content from sources outside the user's control, the attack surface is structural and cannot be patched away.
+
+### Reason 2 — Auth cannot be guaranteed
+
+The product serves multiple parties feeding and consuming calendar data. MCP server auth (OAuth, Bearer tokens, SSE) cannot be guaranteed to work correctly across all user configurations and all parties involved. The risk of misconfiguration exposing family data — including children's schedules and school locations — is unacceptable.
+
+### Architectural principle
+
+> **MCP tools are safe only when the connected data source is fully trusted, write-controlled, and internal.** VillageOS fails both conditions by design.
+
+MCP remains a valid integration pattern for internal tooling on private, controlled data sources. It is not appropriate for a consumer product that aggregates from external, partially-untrusted inputs.
+
+### Reason 3 — Focus and MVP loop
+
+Beyond security, the MCP server was deprioritised to keep Phase 3 focused on closing the core product loop:
+
+```
+Parent pastes school communication
+    → AI extracts structured event + action items
+    → Event persisted to calendar
+    → Parent sees it in the UI
+```
+
+Persistence (step 3) is the highest-value deliverable. Shipping it completes a working MVP that can be demonstrated to real users. The MCP server would have added infrastructure complexity without advancing the core loop or reaching new users.
