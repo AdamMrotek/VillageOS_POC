@@ -80,6 +80,8 @@ NEXT_PUBLIC_API_URL=http://localhost:8000
 
 > `.env` and `.env.local` are git-ignored. Never commit real keys.
 
+## Findings Summary
+
 ## Status
 
 Active development — see `PHASE_1_DESIGN.md`, `PHASE_2.md`, and `PHASE_3.md` for the roadmap.
