@@ -1,6 +1,6 @@
 # VillageOS
 
-[→ View Data Schema](https://adams-mac.github.io/VillageOS/)
+[→ View Idea Overview and data flow](https://adammrotek.github.io/VillageOS/)
 
 > **Proof of Concept** — This project is an experimental build exploring three AI-driven capabilities described below.
 
