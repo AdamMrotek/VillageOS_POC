@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VillageOS — Data Schema</title>
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', sans-serif;
+      background: #f5f5f4;
+      color: #1c1917;
+      padding: 56px 72px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    header {
+      margin-bottom: 52px;
+    }
+
+    header h1 {
+      font-size: 1.6rem;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      margin-bottom: 4px;
+    }
+
+    header p {
+      font-size: 0.875rem;
+      color: #78716c;
+    }
+
+    section {
+      margin-bottom: 52px;
+    }
+
+    section h2 {
+      font-size: 0.7rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: #a8a29e;
+      margin-bottom: 16px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid #e7e5e4;
+    }
+
+    .card {
+      background: #ffffff;
+      border: 1px solid #e7e5e4;
+      border-radius: 10px;
+      padding: 36px 28px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    /* Legend */
+    .legend {
+      display: flex;
+      gap: 24px;
+      margin-bottom: 20px;
+      align-items: center;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.78rem;
+      font-weight: 500;
+      color: #44403c;
+    }
+
+    .legend-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 3px;
+      flex-shrink: 0;
+    }
+
+    .dot-ai  { background: #fde68a; border: 1.5px solid #d97706; }
+    .dot-rag { background: #ddd6fe; border: 1.5px solid #7c3aed; }
+
+    /* Flows */
+    .flows {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .flow-block h3 {
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: #78716c;
+      margin-bottom: 10px;
+      padding-left: 2px;
+    }
+
+    .flow-block .card {
+      padding: 28px 16px;
+      min-height: 300px;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>VillageOS — Data Schema</h1>
+    <p>Adam Mrotek &middot; 2026-05-04</p>
+  </header>
+
+  <section>
+    <h2>Overview</h2>
+    <div class="card" style="display: block; padding: 28px 32px;">
+      <p style="font-size: 0.9rem; line-height: 1.65; color: #44403c; max-width: 72ch; margin-bottom: 20px;">
+        VillageOS is a family operating system for parents. It turns the chaotic stream of school communications — emails, newsletters, WhatsApp threads — into a single, structured calendar a parent can actually act on.
+      </p>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+        <div style="background: #fefce8; border: 1px solid #fde68a; border-radius: 8px; padding: 18px 20px;">
+          <div style="font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: #d97706; margin-bottom: 8px;">AI Extraction</div>
+          <p style="font-size: 0.84rem; line-height: 1.6; color: #44403c;">Paste any unstructured text — PDF newsletters, forwarded emails, WhatsApp threads. The AI layer produces a structured event (title, date, location, action items with costs) for parent review. No manual data entry.</p>
+        </div>
+        <div style="background: #f5f3ff; border: 1px solid #ddd6fe; border-radius: 8px; padding: 18px 20px;">
+          <div style="font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: #7c3aed; margin-bottom: 8px;">RAG Discovery</div>
+          <p style="font-size: 0.84rem; line-height: 1.6; color: #44403c;">Natural-language search over local providers and stored events. Vector similarity search with metadata filters surfaces relevant results; an LLM synthesises a short, specific recommendation explaining the match.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Data Flows</h2>
+
+    <div class="legend">
+      <div class="legend-item">
+        <div class="legend-dot dot-ai"></div>
+        AI Extraction — LLM converts unstructured text into structured events
+      </div>
+      <div class="legend-item">
+        <div class="legend-dot dot-rag"></div>
+        RAG Discovery — vector search + LLM synthesis over provider data
+      </div>
+    </div>
+
+    <div class="flows">
+
+      <div class="flow-block">
+        <h3>1 — Parent discovers &amp; subscribes to provider</h3>
+        <div class="card">
+          <div class="mermaid">
+flowchart TD
+    classDef rag fill:#ddd6fe,stroke:#7c3aed,color:#3b0764
+
+    U[👤 Parent]
+    Q[🔍 Natural Language Query]:::rag
+    R[RAG Discovery]:::rag
+    P[🏫 Provider Results]
+    S[(Subscription)]
+
+    U -->|types what they need| Q
+    Q -->|vector search + synthesis| R
+    R -->|surfaces matching| P
+    P -->|parent follows| S
+          </div>
+        </div>
+      </div>
+
+      <div class="flow-block">
+        <h3>2 — AI extraction (parent or provider)</h3>
+        <div class="card">
+          <div class="mermaid">
+flowchart TD
+    classDef ai fill:#fde68a,stroke:#d97706,color:#451a03
+
+    PA[👤 Parent]
+    PR[🏫 Provider]
+    T[📋 Raw Text / Email]
+    X[🤖 AI Extraction]:::ai
+    E[📅 Structured Event]:::ai
+    C[📆 Parent Calendar]
+    S[(Subscriptions)]
+    CA[📆 Subscriber Calendars]
+
+    PA -->|pastes text| T
+    PR -->|pastes text| T
+    T --> X
+    X --> E
+    E -->|parent: saved to own| C
+    E -->|provider: broadcast via| S
+    S -->|pushed to| CA
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <section>
+    <h2>Entity Relationships</h2>
+    <div class="card">
+      <div class="mermaid">
+erDiagram
+    USER {
+        uuid id PK
+        string name
+        string email
+    }
+    PROVIDER {
+        uuid id PK
+        string name
+        string category
+        string city
+    }
+    CALENDAR {
+        uuid id PK
+        uuid user_id FK
+    }
+    SUBSCRIPTION {
+        uuid id PK
+        uuid user_id FK
+        uuid provider_id FK
+    }
+    EVENT {
+        uuid id PK
+        uuid calendar_id FK
+        uuid user_id FK
+        uuid provider_id FK
+        string title
+        string event_type
+        datetime start_time
+        string source
+    }
+    ACTION_ITEM {
+        uuid id PK
+        uuid event_id FK
+        string description
+        float cost_gbp
+    }
+
+    USER ||--|| CALENDAR : "owns"
+    USER ||--o{ SUBSCRIPTION : "subscribes to"
+    PROVIDER ||--o{ SUBSCRIPTION : "subscribed by"
+    PROVIDER ||--o{ EVENT : "publishes"
+    USER ||--o{ EVENT : "creates"
+    CALENDAR ||--o{ EVENT : "contains"
+    EVENT ||--o{ ACTION_ITEM : "has"
+      </div>
+    </div>
+  </section>
+
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: 'neutral',
+      themeVariables: {
+        fontSize: '13px',
+        fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+      },
+      er: {
+        diagramPadding: 24,
+        entityPadding: 16,
+        useMaxWidth: true,
+      },
+      flowchart: {
+        curve: 'basis',
+        padding: 16,
+        useMaxWidth: true,
+      }
+    });
+  </script>
+
+</body>
+</html>

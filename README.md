@@ -1,5 +1,7 @@
 # VillageOS
 
+[→ View Data Schema](https://adams-mac.github.io/VillageOS/)
+
 > **Proof of Concept** — This project is an experimental build exploring three AI-driven capabilities described below.
 
 A family operating system that turns unstructured parent communications into actionable calendar events — no manual data entry required.
