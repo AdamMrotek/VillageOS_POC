@@ -4,127 +4,450 @@
 
 @custom-variant dark (&:is(.dark *));
 
+/* ─── Tailwind Theme Mappings ────────────────────────────────────────── */
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-sans);
-  --font-mono: var(--font-geist-mono);
-  --font-heading: var(--font-sans);
-  --color-sidebar-ring: var(--sidebar-ring);
-  --color-sidebar-border: var(--sidebar-border);
-  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
-  --color-sidebar-accent: var(--sidebar-accent);
+  /* shadcn standard slots */
+  --color-background:              var(--background);
+  --color-foreground:              var(--foreground);
+  --color-card:                    var(--card);
+  --color-card-foreground:         var(--card-foreground);
+  --color-popover:                 var(--popover);
+  --color-popover-foreground:      var(--popover-foreground);
+  --color-primary:                 var(--primary);
+  --color-primary-foreground:      var(--primary-foreground);
+  --color-secondary:               var(--secondary);
+  --color-secondary-foreground:    var(--secondary-foreground);
+  --color-muted:                   var(--muted);
+  --color-muted-foreground:        var(--muted-foreground);
+  --color-accent:                  var(--accent);
+  --color-accent-foreground:       var(--accent-foreground);
+  --color-destructive:             var(--destructive);
+  --color-border:                  var(--border);
+  --color-input:                   var(--input);
+  --color-ring:                    var(--ring);
+  --color-sidebar:                 var(--sidebar);
+  --color-sidebar-foreground:      var(--sidebar-foreground);
+  --color-sidebar-primary:         var(--sidebar-primary);
   --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
-  --color-sidebar-primary: var(--sidebar-primary);
-  --color-sidebar-foreground: var(--sidebar-foreground);
-  --color-sidebar: var(--sidebar);
-  --color-chart-5: var(--chart-5);
-  --color-chart-4: var(--chart-4);
-  --color-chart-3: var(--chart-3);
-  --color-chart-2: var(--chart-2);
-  --color-chart-1: var(--chart-1);
-  --color-ring: var(--ring);
-  --color-input: var(--input);
-  --color-border: var(--border);
-  --color-destructive: var(--destructive);
-  --color-accent-foreground: var(--accent-foreground);
-  --color-accent: var(--accent);
-  --color-muted-foreground: var(--muted-foreground);
-  --color-muted: var(--muted);
-  --color-secondary-foreground: var(--secondary-foreground);
-  --color-secondary: var(--secondary);
-  --color-primary-foreground: var(--primary-foreground);
-  --color-primary: var(--primary);
-  --color-popover-foreground: var(--popover-foreground);
-  --color-popover: var(--popover);
-  --color-card-foreground: var(--card-foreground);
-  --color-card: var(--card);
-  --radius-sm: calc(var(--radius) * 0.6);
-  --radius-md: calc(var(--radius) * 0.8);
-  --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) * 1.4);
-  --radius-2xl: calc(var(--radius) * 1.8);
-  --radius-3xl: calc(var(--radius) * 2.2);
-  --radius-4xl: calc(var(--radius) * 2.6);
+  --color-sidebar-accent:          var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border:          var(--sidebar-border);
+  --color-sidebar-ring:            var(--sidebar-ring);
+  --color-chart-1:                 var(--chart-1);
+  --color-chart-2:                 var(--chart-2);
+  --color-chart-3:                 var(--chart-3);
+  --color-chart-4:                 var(--chart-4);
+  --color-chart-5:                 var(--chart-5);
+
+  /* Village palette — creates bg-village-*, text-village-*, border-village-* utilities */
+  --color-village-bg:              var(--village-bg);
+  --color-village-surface:         var(--village-surface);
+  --color-village-surface-alt:     var(--village-surface-alt);
+  --color-village-ink:             var(--village-ink);
+  --color-village-ink-soft:        var(--village-ink-soft);
+  --color-village-ink-mute:        var(--village-ink-mute);
+  --color-village-hairline:        var(--village-hairline);
+  --color-village-accent:          var(--village-accent);
+  --color-village-accent-soft:     var(--village-accent-soft);
+  --color-village-accent-dark:     var(--village-accent-dark);
+  --color-village-warm:            var(--village-warm);
+  --color-village-warm-surface:    var(--village-warm-surface);
+
+  /* Event type dot/chip colors */
+  --color-event-school:            var(--event-school);
+  --color-event-sport:             var(--event-sport);
+  --color-event-birthday:          var(--event-birthday);
+  --color-event-fundraiser:        var(--event-fundraiser);
+  --color-event-meeting:           var(--event-meeting);
+  --color-event-deadline:          var(--event-deadline);
+
+  /* Font families — resolved by next/font vars in layout.tsx */
+  --font-sans:   var(--font-village-sans, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif);
+  --font-mono:   var(--font-jetbrains, 'IBM Plex Mono', ui-monospace, monospace);
+  --font-serif:  var(--font-newsreader, 'Source Serif 4', Georgia, serif);
+
+  /* Radius scale — explicit values matching the design spec */
+  --radius-sm:   0.25rem;    /* 4px  — badges, pills, buttons, chips */
+  --radius-xl:   0.75rem;    /* 12px — mobile cards */
+  --radius-2xl:  1rem;       /* 16px — desktop panels */
+  --radius-4xl:  4rem;       /* 64px — empty state icon circles */
 }
 
+/* ─── Design Tokens ──────────────────────────────────────────────────── */
 :root {
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
-  --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
-  --chart-1: oklch(0.87 0 0);
-  --chart-2: oklch(0.556 0 0);
-  --chart-3: oklch(0.439 0 0);
-  --chart-4: oklch(0.371 0 0);
-  --chart-5: oklch(0.269 0 0);
-  --radius: 0.625rem;
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
+  /* ── shadcn semantic slots — mapped to Meadow palette ── */
+  --background:               oklch(0.952 0.008 88);    /* T.bg          #F4F1EA */
+  --foreground:               oklch(0.152 0.026 155);   /* T.ink         #16221A */
+  --card:                     oklch(1 0 0);             /* T.surface     #FFFFFF */
+  --card-foreground:          oklch(0.152 0.026 155);   /* T.ink */
+  --popover:                  oklch(1 0 0);             /* T.surface */
+  --popover-foreground:       oklch(0.152 0.026 155);   /* T.ink */
+  --primary:                  oklch(0.152 0.026 155);   /* T.ink   — dark button */
+  --primary-foreground:       oklch(1 0 0);             /* T.surface — white on ink */
+  --secondary:                oklch(0.924 0.011 88);    /* T.surfaceAlt  #EBE6DA */
+  --secondary-foreground:     oklch(0.152 0.026 155);   /* T.ink */
+  --muted:                    oklch(0.924 0.011 88);    /* T.surfaceAlt */
+  --muted-foreground:         oklch(0.582 0.013 140);   /* T.inkMute     #8A8F83 */
+  --accent:                   oklch(0.868 0.028 128);   /* T.accentSoft  #D4DCC4 — hover/active tint */
+  --accent-foreground:        oklch(0.152 0.026 155);   /* T.ink */
+  --destructive:              oklch(0.637 0.237 25);    /* red-500 — deadlines, errors */
+  --border:                   oklch(0.838 0.013 88);    /* T.hairline    #D8D1BF */
+  --input:                    oklch(0.838 0.013 88);    /* T.hairline */
+  --ring:                     oklch(0.489 0.072 140);   /* T.accent      #5C7A4A — focus ring */
+  --radius:                   0.25rem;                  /* 4px base */
+
+  /* Sidebar mapped to Meadow surfaces */
+  --sidebar:                  oklch(0.924 0.011 88);    /* T.surfaceAlt */
+  --sidebar-foreground:       oklch(0.152 0.026 155);   /* T.ink */
+  --sidebar-primary:          oklch(0.489 0.072 140);   /* T.accent */
+  --sidebar-primary-foreground: oklch(1 0 0);
+  --sidebar-accent:           oklch(0.868 0.028 128);   /* T.accentSoft */
+  --sidebar-accent-foreground: oklch(0.364 0.062 140);  /* T.accentDark */
+  --sidebar-border:           oklch(0.838 0.013 88);    /* T.hairline */
+  --sidebar-ring:             oklch(0.489 0.072 140);   /* T.accent */
+
+  /* Chart slots wired to event type colors */
+  --chart-1:  oklch(0.623 0.214 259);  /* school — blue-500     */
+  --chart-2:  oklch(0.489 0.072 140);  /* sport — T.accent       */
+  --chart-3:  oklch(0.609 0.118 72);   /* fundraiser — T.warm    */
+  --chart-4:  oklch(0.795 0.184 86);   /* meeting — yellow-500   */
+  --chart-5:  oklch(0.637 0.237 25);   /* deadline — red-500     */
+
+  /* ── Village raw hex tokens (use in JS via lib/tokens.ts) ── */
+  --village-bg:               #F4F1EA;
+  --village-surface:          #FFFFFF;
+  --village-surface-alt:      #EBE6DA;
+  --village-ink:              #16221A;
+  --village-ink-soft:         #4A5346;
+  --village-ink-mute:         #8A8F83;
+  --village-hairline:         #D8D1BF;
+  --village-accent:           #5C7A4A;
+  --village-accent-soft:      #D4DCC4;
+  --village-accent-dark:      #3F5731;
+  --village-warm:             #C28A1F;
+  --village-warm-surface:     #F2E4C6;
+
+  /* Event type accent colors */
+  --event-school:             oklch(0.623 0.214 259);   /* blue-500  */
+  --event-sport:              oklch(0.489 0.072 140);   /* T.accent  */
+  --event-birthday:           oklch(0.718 0.202 350);   /* pink-500  */
+  --event-fundraiser:         oklch(0.705 0.191 55);    /* orange-500 */
+  --event-meeting:            oklch(0.795 0.184 86);    /* yellow-500 */
+  --event-deadline:           oklch(0.637 0.237 25);    /* red-500   */
+
+  /* Font variable (General Sans system fallback; override via next/font if licensed) */
+  --font-village-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 }
 
-.dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.205 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.922 0 0);
-  --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.556 0 0);
-  --chart-1: oklch(0.87 0 0);
-  --chart-2: oklch(0.556 0 0);
-  --chart-3: oklch(0.439 0 0);
-  --chart-4: oklch(0.371 0 0);
-  --chart-5: oklch(0.269 0 0);
-  --sidebar: oklch(0.205 0 0);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.269 0 0);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.556 0 0);
-}
-
+/* ─── Base Layer ─────────────────────────────────────────────────────── */
 @layer base {
   * {
     @apply border-border outline-ring/50;
   }
   body {
     @apply bg-background text-foreground;
+    font-family: var(--font-sans);
+    font-size: 13px;
+    font-weight: 500;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
   }
-  html {
-    @apply font-sans;
+}
+
+/* ─── Semantic Component Classes ─────────────────────────────────────── */
+@layer components {
+
+  /* ════════════════════════════════════════════════
+     TYPOGRAPHY
+     Usage: apply one class per text element.
+     Mix with Tailwind color overrides as needed.
+     ════════════════════════════════════════════════ */
+
+  /* — Display / Headings — Newsreader serif — */
+
+  /* Full-page hero date or section statement */
+  .text-hero {
+    font-family: var(--font-serif);
+    font-size: 60px;
+    font-weight: 400;
+    letter-spacing: -0.025em;
+    line-height: 1.05;
+    color: var(--village-ink);
+  }
+  /* Panel or page title ("Week of 4 May") */
+  .text-title {
+    font-family: var(--font-serif);
+    font-size: 30px;
+    font-weight: 400;
+    letter-spacing: -0.015em;
+    line-height: 1.2;
+    color: var(--village-ink);
+  }
+  /* Card heading, modal heading */
+  .text-heading {
+    font-family: var(--font-serif);
+    font-size: 22px;
+    font-weight: 400;
+    line-height: 1.3;
+    color: var(--village-ink);
+  }
+  /* Large stat/count number ("14 events") */
+  .text-stat {
+    font-family: var(--font-serif);
+    font-size: 36px;
+    font-weight: 400;
+    font-variant-numeric: tabular-nums;
+    line-height: 1.0;
+    color: var(--village-ink);
+  }
+
+  /* — Body / UI — General Sans — */
+
+  .text-body {
+    font-size: 13px;
+    font-weight: 500;
+    line-height: 1.5;
+    color: var(--village-ink);
+  }
+  /* Softer secondary body text — color set in @layer utilities to beat Tailwind's generated text-secondary */
+  .text-secondary {
+    font-size: 13px;
+    font-weight: 400;
+    line-height: 1.5;
+  }
+  /* Labels, captions, counts */
+  .text-meta {
+    font-size: 11px;
+    font-weight: 400;
+    line-height: 1.4;
+    color: var(--village-ink-mute);
+  }
+  /* UPPERCASE section eyebrow ("UPCOMING · 3 EVENTS") */
+  .text-eyebrow {
+    font-size: 9.5px;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--village-ink-mute);
+  }
+  /* Eyebrow in accent color for AI/prep panels */
+  .text-eyebrow-accent {
+    font-size: 9.5px;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--village-accent-dark);
+  }
+
+  /* — Time — JetBrains Mono, tabular — */
+
+  /* Muted time stamp ("9:30 AM", "Thu") */
+  .text-time {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 400;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0.02em;
+    color: var(--village-ink-mute);
+  }
+  /* Prominent time, e.g. inside selected event strip */
+  .text-time-prominent {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-weight: 500;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0.02em;
+    color: var(--village-ink);
+  }
+
+  /* — Date — */
+
+  /* Large serif date display ("4 May") */
+  .text-date-hero {
+    font-family: var(--font-serif);
+    font-size: 60px;
+    font-weight: 400;
+    letter-spacing: -0.025em;
+    line-height: 1.0;
+    color: var(--village-ink);
+  }
+  /* Mono uppercase date label ("MON 05") */
+  .text-date-label {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 400;
+    font-variant-numeric: tabular-nums;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--village-ink-mute);
+  }
+  /* Serif day number inside week column header */
+  .text-date-day {
+    font-family: var(--font-serif);
+    font-size: 22px;
+    font-weight: 400;
+    line-height: 1.0;
+    color: var(--village-ink);
+  }
+
+  /* — Footer / attribution — */
+
+  /* Bottom of card, panel footer, provider meta */
+  .text-footer {
+    font-size: 11px;
+    font-weight: 400;
+    letter-spacing: 0.01em;
+    color: var(--village-ink-mute);
+  }
+
+  /* ════════════════════════════════════════════════
+     CARDS
+     No box-shadow anywhere — depth via bg contrast
+     and border only.
+     ════════════════════════════════════════════════ */
+
+  /* White panel on warm bg — main desktop panels (16px radius) */
+  .card-default {
+    background: var(--village-surface);
+    border: 1px solid var(--village-hairline);
+    border-radius: 16px;
+  }
+  /* Same but 12px radius for mobile cards */
+  .card-default-mobile {
+    background: var(--village-surface);
+    border: 1px solid var(--village-hairline);
+    border-radius: 12px;
+  }
+  /* surfaceAlt bg — sub-panels, info sidebars, empty states */
+  .card-secondary {
+    background: var(--village-surface-alt);
+    border: 1px solid var(--village-hairline);
+    border-radius: 16px;
+  }
+  /* accentSoft bg — prep panel, AI suggestion areas */
+  .card-accent {
+    background: var(--village-accent-soft);
+    border: 1px solid rgba(63, 87, 49, 0.15);
+    border-radius: 16px;
+  }
+  /* Warm surface + left accent stripe — deadlines, urgent items */
+  .card-urgent {
+    background: var(--village-warm-surface);
+    border: 1px solid var(--village-hairline);
+    border-left: 2px solid var(--village-warm);
+    border-radius: 4px;
+  }
+  /* Inverted ink bg — strong CTA cards, onboarding prompts */
+  .card-primary {
+    background: var(--village-ink);
+    color: var(--village-surface);
+    border-radius: 16px;
+  }
+
+
+  /* ════════════════════════════════════════════════
+     LINES & BORDERS
+     Four semantic roles — use the right one.
+     Mixing them breaks the visual hierarchy.
+     ════════════════════════════════════════════════ */
+
+  /*
+   * 1. STRUCTURAL BREAK
+   * Use: once per panel, directly under the panel title/header.
+   * Signals a hard section change. Full ink weight.
+   * Example: bottom edge of CenterColumn header.
+   */
+  .line-structural {
+    border-bottom: 2px solid var(--village-ink);
+  }
+
+  /*
+   * 2. DATA SEPARATOR
+   * Use: sits above stat numbers. Reads like a print column rule.
+   * The line *introduces* the number — don't use it as a general divider.
+   */
+  .line-data {
+    border-top: 1px solid var(--village-ink);
+    padding-top: 10px;
+  }
+  .line-data-mobile {
+    border-top: 1px solid var(--village-ink);
+    padding-top: 8px;
+  }
+
+  /*
+   * 3. HAIRLINE DIVIDER
+   * Use: panel outlines, row separators, column borders, topbar.
+   * The workhorse — warm grey, 1px, all sides.
+   */
+  .line-divider        { border: 1px solid var(--village-hairline); }
+  .line-divider-top    { border-top: 1px solid var(--village-hairline); }
+  .line-divider-bottom { border-bottom: 1px solid var(--village-hairline); }
+  .line-divider-right  { border-right: 1px solid var(--village-hairline); }
+  .line-divider-left   { border-left: 1px solid var(--village-hairline); }
+
+  /*
+   * 4. CONTEXTUAL ACCENT LINES
+   * Use: event chips (left stripe), active nav, prep row dividers, ghost buttons.
+   */
+  .line-accent-nav     { border-bottom: 1.5px solid var(--village-accent); }    /* active nav item */
+  .line-accent-event   { border-left: 2px solid var(--village-accent); }        /* sport / green chip */
+  .line-warm-event     { border-left: 2px solid var(--village-warm); }          /* deadline / warm chip */
+  .line-muted-event    { border-left: 2px solid var(--village-ink-mute); }      /* default chip */
+  .line-prep-row       { border-bottom: 1px solid rgba(63, 87, 49, 0.15); }     /* prep rows on accentSoft bg */
+  .line-ghost-button   { border: 1px solid rgba(255, 255, 255, 0.2); }          /* ghost btn on T.ink bg */
+}
+
+/* ─── Typography overrides ───────────────────────────────────────────────── */
+/*
+ * Tailwind v4 auto-generates text-* utilities from every --color-* variable.
+ * --color-secondary resolves to surfaceAlt (#EBE6DA) — a near-invisible beige.
+ * Redefining in @layer utilities ensures our value wins over the generated one.
+ */
+@layer utilities {
+  .text-secondary {
+    color: var(--village-ink-soft);
+  }
+}
+
+/*
+ * WCAG AA contrast fixes — contextual overrides inside @layer components.
+ * Compound selectors (.card-X .text-Y) have higher specificity than the base
+ * single-class definitions above, so no layer tricks needed.
+ */
+@layer components {
+  /* Tinted card surfaces — step up to ink for WCAG AA compliance */
+  .card-secondary .text-secondary,
+  .card-accent .text-secondary,
+  .card-urgent .text-secondary {
+    color: var(--village-ink);
+  }
+
+  /* inkMute (~2.3–3.3:1 on white and tinted bgs) — step up to inkSoft (~8:1) */
+  .card-default .text-eyebrow,
+  .card-default .text-footer,
+  .card-default .text-meta,
+  .card-default .text-time,
+  .card-default .text-time-prominent,
+  .card-default-mobile .text-eyebrow,
+  .card-default-mobile .text-footer,
+  .card-default-mobile .text-meta,
+  .card-default-mobile .text-time,
+  .card-default-mobile .text-time-prominent,
+  .card-secondary .text-eyebrow,
+  .card-secondary .text-footer,
+  .card-secondary .text-meta,
+  .card-secondary .text-time,
+  .card-secondary .text-time-prominent,
+  .card-accent .text-footer,
+  .card-accent .text-meta,
+  .card-accent .text-time,
+  .card-accent .text-time-prominent,
+  .card-urgent .text-eyebrow,
+  .card-urgent .text-footer,
+  .card-urgent .text-meta,
+  .card-urgent .text-time,
+  .card-urgent .text-time-prominent {
+    color: var(--village-ink-soft);
   }
 }
