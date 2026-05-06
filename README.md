@@ -10,13 +10,27 @@ A family operating system that turns unstructured parent communications into act
 
 Parents receive school newsletters, WhatsApp messages, flyers, and email chains that are hard to keep track of. VillageOS lets you paste or upload any of that content and automatically extracts events, deadlines, and action items into a unified family calendar.
 
+Week Calendar 
+<img width="1132" height="746" alt="week_calendar" src="https://github.com/user-attachments/assets/5974b3b1-6b32-4d22-8156-39e41fa80f59" />
+
+
+
 ## What we are testing
 
 ### 1. AI Extraction into Structured Data
 Raw parent communications — PDFs, WhatsApp messages, flyer images, emails — are passed through an AI extraction layer that outputs clean, structured event data (title, date, location, action required). The goal is zero manual data entry for the parent.
 
+Event extraction
+<img width="1097" height="748" alt="Event_extraction" src="https://github.com/user-attachments/assets/f584e60f-4fd3-43a9-ad15-b66cc24d0436" />
+
+
 ### 2. RAG Retrieval of Places to Subscribe
 A retrieval-augmented generation pipeline indexes local providers (schools, clubs, sports teams) so parents can discover and subscribe to event feeds relevant to their children. The system surfaces the right groups without the parent needing to know they exist.
+
+Rag retrival with explanation
+
+<img width="1089" height="700" alt="Rag_event_search" src="https://github.com/user-attachments/assets/4744873d-770a-4706-ab24-65f222c309fe" />
+
 
 ### 3. MCP Server for Local AI Access
 A Model Context Protocol server exposes VillageOS data to local AI assistants. This lets you query your family calendar, upcoming events, and action items directly from your own AI tools — keeping data local and under your control.
