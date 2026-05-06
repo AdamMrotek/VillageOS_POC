@@ -32,7 +32,7 @@ Rag retrival with explanation
 <img width="1089" height="700" alt="Rag_event_search" src="https://github.com/user-attachments/assets/4744873d-770a-4706-ab24-65f222c309fe" />
 
 
-### 3. MCP Server for Local AI Access
+### 3. MCP Server for Local AI Access ( Removed )
 A Model Context Protocol server exposes VillageOS data to local AI assistants. This lets you query your family calendar, upcoming events, and action items directly from your own AI tools — keeping data local and under your control.
 
 ---
@@ -41,7 +41,7 @@ A Model Context Protocol server exposes VillageOS data to local AI assistants. T
 
 - **Frontend** — React app for the parent-facing dashboard
 - **Backend** — API server handling AI extraction and calendar management
-- **MCP Server** — Model Context Protocol integration for AI tooling
+- ~~**MCP Server** — Model Context Protocol integration for AI tooling~~
 - **AI Extraction Layer** — Processes unstructured text and images into structured events
 
 ## Getting started
@@ -63,14 +63,6 @@ npm run dev
 ```
 
 Runs on `http://localhost:3000` — expects the backend on `http://localhost:8000`.
-
-### MCP Server
-
-```bash
-cd mcp-server
-npm install
-npm start
-```
 
 ## Environment variables
 
