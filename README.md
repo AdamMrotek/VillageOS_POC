@@ -1,6 +1,6 @@
 # VillageOS
 
-[→ View Idea Overview and data flow](https://adammrotek.github.io/VillageOS/)
+[→ View Idea Overview and data flow](https://adammrotek.github.io/VillageOS_POC/)
 
 > **Proof of Concept** — This project is an experimental build exploring three AI-driven capabilities described below.
 
