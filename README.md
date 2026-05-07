@@ -1,5 +1,5 @@
 # VillageOS
-
+[→ POC presentation page](https://village-os-poc.vercel.app/today)
 [→ View Idea Overview and data flow](https://adammrotek.github.io/VillageOS_POC/)
 
 > **Proof of Concept** — This project is an experimental build exploring three AI-driven capabilities described below.
