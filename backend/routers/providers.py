@@ -1,7 +1,7 @@
 from fastapi import APIRouter, HTTPException
-from backend.schemas import Provider, ProviderSearchRequest, ProviderSearchResponse
-from backend.services.provider_search import search_providers
-from backend.services.vector_store import query_providers
+from schemas import Provider, ProviderSearchRequest, ProviderSearchResponse
+from services.provider_search import search_providers
+from services.vector_store import query_providers
 
 router = APIRouter(prefix="/api/v1/providers", tags=["providers"])
 

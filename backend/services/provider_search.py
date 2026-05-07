@@ -1,7 +1,7 @@
 from openai import OpenAI
-from backend.schemas import Provider, ProviderResult, ProviderSearchResponse
-from backend.services.vector_store import query_providers
-from backend.services.query_expander import expand_query
+from schemas import Provider, ProviderResult, ProviderSearchResponse
+from services.vector_store import query_providers
+from services.query_expander import expand_query
 
 _client = OpenAI()
 _MODEL = "gpt-4o-mini"

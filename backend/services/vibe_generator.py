@@ -6,8 +6,8 @@ for a provider. Called once at seed time per provider.
 import json
 from dataclasses import dataclass
 from openai import OpenAI
-from backend.schemas import Provider
-from backend.services.tags import TAG_VOCABULARY, vocab_prompt_block
+from schemas import Provider
+from services.tags import TAG_VOCABULARY, vocab_prompt_block
 
 _client = OpenAI()
 _MODEL = "gpt-4o-mini"

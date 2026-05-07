@@ -1,6 +1,6 @@
 from fastapi import APIRouter, HTTPException
-from backend.schemas import ExtractRequest, ExtractResponse
-from backend.services.extraction import extract_event
+from schemas import ExtractRequest, ExtractResponse
+from services.extraction import extract_event
 
 router = APIRouter(prefix="/api/v1", tags=["extraction"])
 

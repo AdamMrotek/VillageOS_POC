@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Query
 from datetime import datetime, timezone
 from typing import Optional
-from backend.schemas import StoredEvent, EventType, ActionItem
+from schemas import StoredEvent, EventType, ActionItem
 
 router = APIRouter(prefix="/api/v1", tags=["events"])
 

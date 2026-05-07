@@ -2,7 +2,7 @@ import os
 import instructor
 from openai import AsyncOpenAI
 from datetime import date
-from backend.schemas import ParentEvent, ExtractResponse
+from schemas import ParentEvent, ExtractResponse
 
 SYSTEM_PROMPT = """
 You are a calendar assistant for parents. Extract structured event information

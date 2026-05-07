@@ -6,7 +6,7 @@ and extracts hard tag constraints (for post-filter).
 import json
 from dataclasses import dataclass, field
 from openai import OpenAI
-from backend.services.tags import TAG_VOCABULARY, vocab_prompt_block
+from services.tags import TAG_VOCABULARY, vocab_prompt_block
 
 _client = OpenAI()
 _MODEL = "gpt-4o-mini"

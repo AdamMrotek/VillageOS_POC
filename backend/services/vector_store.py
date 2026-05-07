@@ -6,7 +6,7 @@ import os
 import numpy as np
 from openai import OpenAI
 
-from backend.schemas import Provider
+from schemas import Provider
 
 _EMBEDDINGS_PATH = os.path.abspath(
     os.path.join(os.path.dirname(__file__), "..", "data", "embeddings.json")
