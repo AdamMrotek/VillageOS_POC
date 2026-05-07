@@ -1,5 +1,7 @@
 # VillageOS
+
 [→ POC presentation page](https://village-os-poc.vercel.app/today)
+
 [→ View Idea Overview and data flow](https://adammrotek.github.io/VillageOS_POC/)
 
 > **Proof of Concept** — This project is an experimental build exploring three AI-driven capabilities described below.
@@ -18,7 +20,7 @@ Week Calendar
 ## What we are testing
 
 ### 1. AI Extraction into Structured Data
-Raw parent communications — PDFs, WhatsApp messages, flyer images, emails — are passed through an AI extraction layer that outputs clean, structured event data (title, date, location, action required). The goal is zero manual data entry for the parent.
+Raw parent communications — PDFs, WhatsApp messages, flyer images, emails — are passed through an AI extraction layer that outputs clean, structured event data (title, date, location, action required). The goal is zero manual data entry (hopefully) for the parent.
 
 Event extraction
 <img width="1097" height="748" alt="Event_extraction" src="https://github.com/user-attachments/assets/f584e60f-4fd3-43a9-ad15-b66cc24d0436" />
