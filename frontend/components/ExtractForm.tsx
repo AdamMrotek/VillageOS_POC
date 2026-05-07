@@ -1,8 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
+import { FileText } from "lucide-react";
 import { extractEvent } from "@/lib/api";
 import type { ExtractResponse } from "@/lib/types";
 
@@ -36,54 +35,45 @@ export function ExtractForm({ onResult, isLoading, setIsLoading }: ExtractFormPr
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-3">
       <div className="relative">
-        <Textarea
+        <textarea
           value={text}
           onChange={(e) => setText(e.target.value.slice(0, MAX_CHARS))}
           placeholder="Paste a WhatsApp message, newsletter, email — anything with an event in it…"
           rows={8}
-          className="resize-none"
+          className="w-full resize-none rounded-[4px] border border-village-hairline bg-village-surface px-3 py-2.5 text-body placeholder:text-village-ink-mute focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-village-accent transition-colors disabled:opacity-50"
           disabled={isLoading}
         />
-        <span className="absolute bottom-2 right-3 text-xs text-muted-foreground select-none">
+        <span className="absolute bottom-2.5 right-3 text-time select-none">
           {text.length}/{MAX_CHARS}
         </span>
       </div>
 
       {error && (
-        <div className="rounded-md bg-red-50 border border-red-200 px-3 py-2 text-sm text-red-700">
-          {error}
+        <div className="rounded-[4px] bg-village-warm-surface border border-village-hairline px-3 py-2">
+          <p className="text-body text-village-warm">{error}</p>
         </div>
       )}
 
-      <Button
+      <button
         type="submit"
         disabled={isLoading || text.trim().length < 10}
-        className="self-start"
+        className="self-start inline-flex items-center gap-1.5 px-4 py-[10px] rounded-[4px] bg-village-ink text-white text-[12px] font-medium tracking-[0.02em] hover:opacity-80 transition-opacity disabled:opacity-30"
       >
         {isLoading ? (
-          <span className="flex items-center gap-2">
-            <svg
-              className="animate-spin h-4 w-4"
-              viewBox="0 0 24 24"
-              fill="none"
-            >
-              <circle
-                className="opacity-25"
-                cx="12" cy="12" r="10"
-                stroke="currentColor" strokeWidth="4"
-              />
-              <path
-                className="opacity-75"
-                fill="currentColor"
-                d="M4 12a8 8 0 018-8v8z"
-              />
+          <>
+            <svg className="animate-spin h-3.5 w-3.5" viewBox="0 0 24 24" fill="none">
+              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z" />
             </svg>
             Extracting…
-          </span>
+          </>
         ) : (
-          "Extract Event →"
+          <>
+            <FileText size={13} />
+            Extract Event
+          </>
         )}
-      </Button>
+      </button>
     </form>
   );
 }

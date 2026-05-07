@@ -126,7 +126,7 @@ export function MonthCalendar({ events, month, onMonthChange, selectedDay, onDay
                   ? "text-zinc-900 dark:text-zinc-100 hover:bg-zinc-100 dark:hover:bg-zinc-800"
                   : "text-zinc-300 dark:text-zinc-600 hover:bg-zinc-50 dark:hover:bg-zinc-900",
                 isSelected
-                  ? "bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 hover:bg-zinc-800 dark:hover:bg-zinc-200"
+                  ? "bg-village-accent-soft text-village-ink hover:bg-village-accent/30"
                   : "",
               ].join(" ")}
             >
@@ -146,12 +146,12 @@ export function MonthCalendar({ events, month, onMonthChange, selectedDay, onDay
                 {visibleDots.map((e, di) => (
                   <span
                     key={di}
-                    className={`w-1.5 h-1.5 rounded-full ${isSelected ? "bg-white dark:bg-zinc-900" : TYPE_DOT[e.event_type]}`}
+                    className={`w-1.5 h-1.5 rounded-full ${TYPE_DOT[e.event_type]}`}
                   />
                 ))}
                 {overflow > 0 && (
                   <span
-                    className={`text-[9px] leading-none font-medium ${isSelected ? "text-white dark:text-zinc-900" : "text-zinc-400"}`}
+                    className="text-[9px] leading-none font-medium text-zinc-400"
                   >
                     +{overflow}
                   </span>

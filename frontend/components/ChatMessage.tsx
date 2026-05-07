@@ -9,16 +9,14 @@ interface ChatMessageProps {
 export function ChatMessage({ query, response }: ChatMessageProps) {
   return (
     <div className="space-y-4">
-      <div className="flex gap-2">
-        <span className="text-xs font-semibold uppercase tracking-widest text-muted-foreground pt-0.5">
-          You
-        </span>
-        <p className="text-sm">{query}</p>
+      <div className="line-divider-bottom pb-4 flex gap-3 items-start">
+        <span className="text-eyebrow shrink-0 pt-0.5">YOU</span>
+        <p className="text-body">{query}</p>
       </div>
 
-      <div className="space-y-3 pl-0">
-        <div className="rounded-lg bg-muted/50 px-4 py-3 text-sm leading-relaxed">
-          {response.synthesis}
+      <div className="space-y-4">
+        <div className="card-accent px-4 py-3">
+          <p className="text-secondary">{response.synthesis}</p>
         </div>
 
         {response.results.length > 0 && (
@@ -29,9 +27,7 @@ export function ChatMessage({ query, response }: ChatMessageProps) {
           </div>
         )}
 
-        <p className="text-xs text-muted-foreground">
-          {response.model_used} · {response.tokens_used} tokens
-        </p>
+        <p className="text-time">{response.model_used} · {response.tokens_used} tokens</p>
       </div>
     </div>
   );

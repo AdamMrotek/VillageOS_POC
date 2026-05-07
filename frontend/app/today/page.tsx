@@ -147,17 +147,16 @@ function WeekDay({
                 e.tone === "accent"
                   ? T.accentSoft
                   : e.tone === "warm"
-                  ? "#F2E4C6"
-                  : T.surfaceAlt,
+                    ? "#F2E4C6"
+                    : T.surfaceAlt,
               fontSize: 11,
               lineHeight: 1.35,
-              borderLeft: `2px solid ${
-                e.tone === "accent"
+              borderLeft: `2px solid ${e.tone === "accent"
                   ? T.accent
                   : e.tone === "warm"
-                  ? T.warm
-                  : T.inkMute
-              }`,
+                    ? T.warm
+                    : T.inkMute
+                }`,
             }}
           >
             <div
@@ -854,141 +853,8 @@ function RightRail({ empty }: { empty: boolean }) {
 function MeadowDesktop({ empty }: { empty: boolean }) {
   return (
     <div
-      style={{
-        width: 1440,
-        height: 1020,
-        background: T.bg,
-        fontFamily: sans,
-        color: T.ink,
-        padding: "32px 40px 36px",
-        display: "flex",
-        flexDirection: "column",
-        gap: 24,
-        boxSizing: "border-box",
-      }}
+
     >
-      {/* Topbar */}
-      <header
-        style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          paddingBottom: 16,
-          borderBottom: `1px solid ${T.hairline}`,
-        }}
-      >
-        <div style={{ display: "flex", alignItems: "center", gap: 32 }}>
-          <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-            <div
-              style={{
-                width: 26,
-                height: 26,
-                background: T.ink,
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                color: T.bg,
-                fontFamily: display,
-                fontSize: 16,
-                lineHeight: 1,
-              }}
-            >
-              V
-            </div>
-            <span
-              style={{
-                fontFamily: display,
-                fontSize: 18,
-                letterSpacing: "-0.01em",
-              }}
-            >
-              VillageOS
-            </span>
-            <span
-              style={{
-                fontSize: 9.5,
-                padding: "2px 6px",
-                background: T.accentSoft,
-                color: T.accentDark,
-                letterSpacing: "0.1em",
-                fontFamily: mono,
-              }}
-            >
-              BETA
-            </span>
-          </div>
-          <nav
-            style={{
-              display: "flex",
-              gap: 22,
-              fontSize: 12,
-              color: T.inkSoft,
-            }}
-          >
-            {["Today", "Calendar", "Inbox", "Discover", "Providers", "MCP"].map(
-              (n, i) => (
-                <span
-                  key={n}
-                  style={{
-                    color: i === 0 ? T.ink : T.inkSoft,
-                    fontWeight: i === 0 ? 600 : 400,
-                    borderBottom:
-                      i === 0 ? `1.5px solid ${T.accent}` : "none",
-                    paddingBottom: 2,
-                  }}
-                >
-                  {n}
-                </span>
-              )
-            )}
-          </nav>
-        </div>
-        <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
-          <span
-            style={{
-              fontSize: 11,
-              fontFamily: mono,
-              color: T.inkMute,
-              letterSpacing: "0.04em",
-            }}
-          >
-            MON 04 MAY 2026
-          </span>
-          <button
-            style={{
-              padding: "7px 14px",
-              borderRadius: 4,
-              fontSize: 11.5,
-              background: T.ink,
-              color: T.surface,
-              border: "none",
-              fontFamily: sans,
-              fontWeight: 500,
-              letterSpacing: "0.02em",
-              cursor: "pointer",
-            }}
-          >
-            + Extract
-          </button>
-          <div
-            style={{
-              width: 28,
-              height: 28,
-              borderRadius: 28,
-              background: T.accent,
-              color: T.surface,
-              fontFamily: sans,
-              fontSize: 11,
-              fontWeight: 600,
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            AM
-          </div>
-        </div>
-      </header>
 
       {/* Hero */}
       <div
@@ -1344,9 +1210,8 @@ function MeadowMobile({ empty }: { empty: boolean }) {
                 </span>
                 <div
                   style={{
-                    borderLeft: `2px solid ${
-                      e.tone === "accent" ? T.accent : T.inkMute
-                    }`,
+                    borderLeft: `2px solid ${e.tone === "accent" ? T.accent : T.inkMute
+                      }`,
                     paddingLeft: 10,
                   }}
                 >
@@ -1605,17 +1470,7 @@ export default function MeadowPage() {
             marginBottom: 32,
           }}
         >
-          <span
-            style={{
-              fontSize: 10,
-              letterSpacing: "0.2em",
-              textTransform: "uppercase",
-              color: T.inkMute,
-              fontWeight: 600,
-            }}
-          >
-            Direction B — Meadow
-          </span>
+
           <div style={{ flex: 1 }} />
           <button
             onClick={() => setEmpty(false)}
@@ -1638,42 +1493,7 @@ export default function MeadowPage() {
             Empty state
           </button>
         </div>
-
-        {/* Desktop preview */}
-        <div style={{ marginBottom: 40 }}>
-          <div
-            style={{
-              fontSize: 9.5,
-              letterSpacing: "0.18em",
-              textTransform: "uppercase",
-              color: T.inkMute,
-              fontWeight: 600,
-              marginBottom: 12,
-            }}
-          >
-            Desktop · 1440 × 1020
-          </div>
-          <div style={{ overflowX: "auto", borderRadius: 12 }}>
-            <MeadowDesktop empty={empty} />
-          </div>
-        </div>
-
-        {/* Mobile preview */}
-        <div>
-          <div
-            style={{
-              fontSize: 9.5,
-              letterSpacing: "0.18em",
-              textTransform: "uppercase",
-              color: T.inkMute,
-              fontWeight: 600,
-              marginBottom: 12,
-            }}
-          >
-            Mobile · 390 × 844
-          </div>
-          <MeadowMobile empty={empty} />
-        </div>
+        <MeadowDesktop empty={empty} />
       </div>
     </>
   );

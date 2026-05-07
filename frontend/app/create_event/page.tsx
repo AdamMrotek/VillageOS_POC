@@ -10,13 +10,19 @@ export default function CreateEventPage() {
   const [isLoading, setIsLoading] = useState(false);
 
   return (
-    <div className="min-h-screen bg-zinc-50 dark:bg-zinc-950">
-      <main className="max-w-5xl mx-auto px-6 py-10">
+    <div className="min-h-screen bg-village-bg px-10 py-8">
+      <div className="max-w-[900px] mx-auto">
+
+        <div className="mb-10">
+          <p className="text-eyebrow-accent mb-2">VILLAGEOS · EVENT EXTRACTION</p>
+          <h1 className="text-title mb-1">Extract Event</h1>
+          <p className="text-secondary">Paste a message, email, or newsletter and we&apos;ll pull out the event details.</p>
+        </div>
+
         <div className="flex flex-col md:flex-row gap-8">
-          <section className="flex-1 space-y-3">
-            <h2 className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">
-              Paste your text
-            </h2>
+          <section className="flex-1">
+            <p className="text-eyebrow mb-2">PASTE YOUR TEXT</p>
+            <div className="line-structural mb-5" />
             <ExtractForm
               onResult={setResult}
               isLoading={isLoading}
@@ -24,10 +30,9 @@ export default function CreateEventPage() {
             />
           </section>
 
-          <section className="flex-1 space-y-3">
-            <h2 className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">
-              Event preview
-            </h2>
+          <section className="flex-1">
+            <p className="text-eyebrow mb-2">EVENT PREVIEW</p>
+            <div className="line-structural mb-5" />
             <EventCard
               event={result?.event ?? null}
               modelUsed={result?.model_used}
@@ -35,7 +40,8 @@ export default function CreateEventPage() {
             />
           </section>
         </div>
-      </main>
+
+      </div>
     </div>
   );
 }

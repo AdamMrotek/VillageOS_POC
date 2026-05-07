@@ -1,0 +1,304 @@
+/* ─── Village Component & Utility Classes ────────────────────────────────────
+ *
+ * Kept separate from globals.css because Turbopack+Tailwind v4 PostCSS strips
+ * @layer components content from files that also contain @import "tailwindcss".
+ * This file has no Tailwind imports so Turbopack passes it through untouched.
+ * CSS variables (var(--village-*)) are defined in :root inside globals.css and
+ * resolve correctly across files.
+ * ─────────────────────────────────────────────────────────────────────────── */
+
+@layer components {
+
+  /* ════════════════════════════════════════════════
+     TYPOGRAPHY
+     Usage: apply one class per text element.
+     Mix with Tailwind color overrides as needed.
+     ════════════════════════════════════════════════ */
+
+  /* — Display / Headings — Newsreader serif — */
+
+  /* Full-page hero date or section statement */
+  .text-hero {
+    font-family: var(--font-serif);
+    font-size: 60px;
+    font-weight: 400;
+    letter-spacing: -0.025em;
+    line-height: 1.05;
+    color: var(--village-ink);
+  }
+  /* Panel or page title ("Week of 4 May") */
+  .text-title {
+    font-family: var(--font-serif);
+    font-size: 30px;
+    font-weight: 400;
+    letter-spacing: -0.015em;
+    line-height: 1.2;
+    color: var(--village-ink);
+  }
+  /* Card heading, modal heading */
+  .text-heading {
+    font-family: var(--font-serif);
+    font-size: 22px;
+    font-weight: 400;
+    line-height: 1.3;
+    color: var(--village-ink);
+  }
+  /* Large stat/count number ("14 events") */
+  .text-stat {
+    font-family: var(--font-serif);
+    font-size: 36px;
+    font-weight: 400;
+    font-variant-numeric: tabular-nums;
+    line-height: 1.0;
+    color: var(--village-ink);
+  }
+
+  /* — Body / UI — General Sans — */
+
+  .text-body {
+    font-size: 13px;
+    font-weight: 500;
+    line-height: 1.5;
+    color: var(--village-ink);
+  }
+  /* Softer secondary body text — color set in @layer utilities to beat Tailwind's generated text-secondary */
+  .text-secondary {
+    font-size: 13px;
+    font-weight: 400;
+    line-height: 1.5;
+  }
+  /* Labels, captions, counts */
+  .text-meta {
+    font-size: 11px;
+    font-weight: 400;
+    line-height: 1.4;
+    color: var(--village-ink-mute);
+  }
+  /* UPPERCASE section eyebrow ("UPCOMING · 3 EVENTS") */
+  .text-eyebrow {
+    font-size: 9.5px;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--village-ink-mute);
+  }
+  /* Eyebrow in accent color for AI/prep panels */
+  .text-eyebrow-accent {
+    font-size: 9.5px;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--village-accent-dark);
+  }
+
+  /* — Time — JetBrains Mono, tabular — */
+
+  /* Muted time stamp ("9:30 AM", "Thu") */
+  .text-time {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 400;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0.02em;
+    color: var(--village-ink-mute);
+  }
+  /* Prominent time, e.g. inside selected event strip */
+  .text-time-prominent {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-weight: 500;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0.02em;
+    color: var(--village-ink);
+  }
+
+  /* — Date — */
+
+  /* Large serif date display ("4 May") */
+  .text-date-hero {
+    font-family: var(--font-serif);
+    font-size: 60px;
+    font-weight: 400;
+    letter-spacing: -0.025em;
+    line-height: 1.0;
+    color: var(--village-ink);
+  }
+  /* Mono uppercase date label ("MON 05") */
+  .text-date-label {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 400;
+    font-variant-numeric: tabular-nums;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--village-ink-mute);
+  }
+  /* Serif day number inside week column header */
+  .text-date-day {
+    font-family: var(--font-serif);
+    font-size: 22px;
+    font-weight: 400;
+    line-height: 1.0;
+    color: var(--village-ink);
+  }
+
+  /* — Footer / attribution — */
+
+  /* Bottom of card, panel footer, provider meta */
+  .text-footer {
+    font-size: 11px;
+    font-weight: 400;
+    letter-spacing: 0.01em;
+    color: var(--village-ink-mute);
+  }
+
+  /* ════════════════════════════════════════════════
+     CARDS
+     No box-shadow anywhere — depth via bg contrast
+     and border only.
+     ════════════════════════════════════════════════ */
+
+  /* White panel on warm bg — main desktop panels (16px radius) */
+  .card-default {
+    background: var(--village-surface);
+    border: 1px solid var(--village-hairline);
+    border-radius: 16px;
+  }
+  /* Same but 12px radius for mobile cards */
+  .card-default-mobile {
+    background: var(--village-surface);
+    border: 1px solid var(--village-hairline);
+    border-radius: 12px;
+  }
+  /* surfaceAlt bg — sub-panels, info sidebars, empty states */
+  .card-secondary {
+    background: var(--village-surface-alt);
+    border: 1px solid var(--village-hairline);
+    border-radius: 16px;
+  }
+  /* accentSoft bg — prep panel, AI suggestion areas */
+  .card-accent {
+    background: var(--village-accent-soft);
+    border: 1px solid rgba(63, 87, 49, 0.15);
+    border-radius: 16px;
+  }
+  /* Warm surface + left accent stripe — deadlines, urgent items */
+  .card-urgent {
+    background: var(--village-warm-surface);
+    border: 1px solid var(--village-hairline);
+    border-left: 2px solid var(--village-warm);
+    border-radius: 4px;
+  }
+  /* Inverted ink bg — strong CTA cards, onboarding prompts */
+  .card-primary {
+    background: var(--village-ink);
+    color: var(--village-surface);
+    border-radius: 16px;
+  }
+
+
+  /* ════════════════════════════════════════════════
+     LINES & BORDERS
+     Four semantic roles — use the right one.
+     Mixing them breaks the visual hierarchy.
+     ════════════════════════════════════════════════ */
+
+  /*
+   * 1. STRUCTURAL BREAK
+   * Use: once per panel, directly under the panel title/header.
+   * Signals a hard section change. Full ink weight.
+   * Example: bottom edge of CenterColumn header.
+   */
+  .line-structural {
+    border-bottom: 2px solid var(--village-ink);
+  }
+
+  /*
+   * 2. DATA SEPARATOR
+   * Use: sits above stat numbers. Reads like a print column rule.
+   * The line *introduces* the number — don't use it as a general divider.
+   */
+  .line-data {
+    border-top: 1px solid var(--village-ink);
+    padding-top: 10px;
+  }
+  .line-data-mobile {
+    border-top: 1px solid var(--village-ink);
+    padding-top: 8px;
+  }
+
+  /*
+   * 3. HAIRLINE DIVIDER
+   * Use: panel outlines, row separators, column borders, topbar.
+   * The workhorse — warm grey, 1px, all sides.
+   */
+  .line-divider        { border: 1px solid var(--village-hairline); }
+  .line-divider-top    { border-top: 1px solid var(--village-hairline); }
+  .line-divider-bottom { border-bottom: 1px solid var(--village-hairline); }
+  .line-divider-right  { border-right: 1px solid var(--village-hairline); }
+  .line-divider-left   { border-left: 1px solid var(--village-hairline); }
+
+  /*
+   * 4. CONTEXTUAL ACCENT LINES
+   * Use: event chips (left stripe), active nav, prep row dividers, ghost buttons.
+   */
+  .line-accent-nav     { border-bottom: 1.5px solid var(--village-accent); }    /* active nav item */
+  .line-accent-event   { border-left: 2px solid var(--village-accent); }        /* sport / green chip */
+  .line-warm-event     { border-left: 2px solid var(--village-warm); }          /* deadline / warm chip */
+  .line-muted-event    { border-left: 2px solid var(--village-ink-mute); }      /* default chip */
+  .line-prep-row       { border-bottom: 1px solid rgba(63, 87, 49, 0.15); }     /* prep rows on accentSoft bg */
+  .line-ghost-button   { border: 1px solid rgba(255, 255, 255, 0.2); }          /* ghost btn on T.ink bg */
+
+  /* ════════════════════════════════════════════════
+     WCAG AA CONTRAST FIXES
+     Compound selectors have higher specificity than
+     the single-class definitions above.
+     ════════════════════════════════════════════════ */
+
+  /* Tinted card surfaces — step up to ink for WCAG AA compliance */
+  .card-secondary .text-secondary,
+  .card-accent .text-secondary,
+  .card-urgent .text-secondary {
+    color: var(--village-ink);
+  }
+
+  /* inkMute (~2.3–3.3:1 on white and tinted bgs) — step up to inkSoft (~8:1) */
+  .card-default .text-eyebrow,
+  .card-default .text-footer,
+  .card-default .text-meta,
+  .card-default .text-time,
+  .card-default .text-time-prominent,
+  .card-default-mobile .text-eyebrow,
+  .card-default-mobile .text-footer,
+  .card-default-mobile .text-meta,
+  .card-default-mobile .text-time,
+  .card-default-mobile .text-time-prominent,
+  .card-secondary .text-eyebrow,
+  .card-secondary .text-footer,
+  .card-secondary .text-meta,
+  .card-secondary .text-time,
+  .card-secondary .text-time-prominent,
+  .card-accent .text-footer,
+  .card-accent .text-meta,
+  .card-accent .text-time,
+  .card-accent .text-time-prominent,
+  .card-urgent .text-eyebrow,
+  .card-urgent .text-footer,
+  .card-urgent .text-meta,
+  .card-urgent .text-time,
+  .card-urgent .text-time-prominent {
+    color: var(--village-ink-soft);
+  }
+}
+
+/* ─── Typography override ─────────────────────────────────────────────────── */
+/*
+ * Tailwind v4 auto-generates text-* utilities from every --color-* variable.
+ * --color-secondary resolves to surfaceAlt (#EBE6DA) — a near-invisible beige.
+ * Redefining in @layer utilities ensures our value wins over the generated one.
+ */
+@layer utilities {
+  .text-secondary {
+    color: var(--village-ink-soft);
+  }
+}

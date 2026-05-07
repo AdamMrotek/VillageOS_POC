@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import { Newsreader, JetBrains_Mono } from "next/font/google";
-import Link from "next/link";
+import NavBar from "@/components/NavBar";
 import "./globals.css";
+import "./village.css";
 
 const newsreader = Newsreader({
   variable: "--font-newsreader",
@@ -34,28 +35,7 @@ export default function RootLayout({
       className={`${newsreader.variable} ${jetbrainsMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
-        <header className="line-divider-bottom bg-village-surface px-6 py-4 flex items-center gap-6">
-          <Link href="/" className="text-heading">
-            VillageOS
-          </Link>
-          <nav className="flex gap-[22px] text-meta">
-            <Link href="/calendar" className="hover:text-village-ink transition-colors">
-              Calendar
-            </Link>
-            <Link href="/create_event" className="hover:text-village-ink transition-colors">
-              Extract event
-            </Link>
-            <Link href="/search" className="hover:text-village-ink transition-colors">
-              Find providers
-            </Link>
-            <Link href="/meadow" className="hover:text-village-ink transition-colors">
-              Meadow
-            </Link>
-            <Link href="/design" className="hover:text-village-ink transition-colors">
-              Design
-            </Link>
-          </nav>
-        </header>
+        <NavBar />
         {children}
       </body>
     </html>
