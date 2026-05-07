@@ -28,7 +28,7 @@ def main() -> None:
         print(f"    tags: {vibe.tags}")
         upsert_provider(p, vibe_description=vibe.vibe_description, tags=vibe.tags)
 
-    print(f"\nDone. {len(providers)} providers in ChromaDB.")
+    print(f"\nDone. {len(providers)} providers in embeddings.json.")
 
 
 if __name__ == "__main__":

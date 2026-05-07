@@ -1,40 +1,50 @@
 from __future__ import annotations
 
+import json
 import os
-import chromadb
-from chromadb.utils import embedding_functions
+
+import numpy as np
+from openai import OpenAI
+
 from backend.schemas import Provider
 
-_CHROMA_PATH = os.path.join(os.path.dirname(__file__), "..", "data", "chroma_db")
-_COLLECTION_NAME = "providers"
+_EMBEDDINGS_PATH = os.path.abspath(
+    os.path.join(os.path.dirname(__file__), "..", "data", "embeddings.json")
+)
+_EMBED_MODEL = "text-embedding-3-small"
 
-_client: chromadb.PersistentClient | None = None
-_collection = None
+_store: list[dict] | None = None
+_openai = OpenAI()
 
 
-def _get_collection():
-    global _client, _collection
-    if _collection is not None:
-        return _collection
+def _load_store() -> list[dict]:
+    global _store
+    if _store is not None:
+        return _store
+    if os.path.exists(_EMBEDDINGS_PATH):
+        with open(_EMBEDDINGS_PATH) as f:
+            _store = json.load(f)
+    else:
+        _store = []
+    return _store
 
-    _client = chromadb.PersistentClient(path=os.path.abspath(_CHROMA_PATH))
-    ef = embedding_functions.OpenAIEmbeddingFunction(
-        api_key=os.environ["OPENAI_API_KEY"],
-        model_name="text-embedding-3-small",
-    )
-    _collection = _client.get_or_create_collection(
-        name=_COLLECTION_NAME,
-        embedding_function=ef,
-        metadata={"hnsw:space": "cosine"},
-    )
-    return _collection
+
+def _save_store(store: list[dict]) -> None:
+    with open(_EMBEDDINGS_PATH, "w") as f:
+        json.dump(store, f)
+
+
+def _embed(text: str) -> list[float]:
+    response = _openai.embeddings.create(input=text, model=_EMBED_MODEL)
+    return response.data[0].embedding
+
+
+def _cosine(a: list[float], b: list[float]) -> float:
+    va, vb = np.array(a), np.array(b)
+    return float(np.dot(va, vb) / (np.linalg.norm(va) * np.linalg.norm(vb)))
 
 
 def _build_document(provider: Provider, vibe_description: str = "") -> str:
-    """
-    Vibe description leads (drives semantic matching); factual name + description
-    follow so keyword searches (e.g. "pottery", "football") still work.
-    """
     parts: list[str] = []
     if vibe_description:
         parts.append(vibe_description)
@@ -50,42 +60,51 @@ def upsert_provider(
     vibe_description: str = "",
     tags: dict[str, list[str]] | None = None,
 ) -> None:
-    col = _get_collection()
+    store = _load_store()
     doc = _build_document(provider, vibe_description)
+    embedding = _embed(doc)
 
     metadata: dict = {
-        "city":           provider.city,
-        "name":           provider.name,
-        "category":       provider.category,
-        "description":    provider.description,
-        "tags":           ",".join(provider.tags),
-        "age_range_min":  provider.age_range_min if provider.age_range_min is not None else -1,
-        "age_range_max":  provider.age_range_max if provider.age_range_max is not None else -1,
+        "city":            provider.city,
+        "name":            provider.name,
+        "category":        provider.category,
+        "description":     provider.description,
+        "tags":            ",".join(provider.tags),
+        "age_range_min":   provider.age_range_min if provider.age_range_min is not None else -1,
+        "age_range_max":   provider.age_range_max if provider.age_range_max is not None else -1,
         "price_indicator": provider.price_indicator or "",
-        "noise_level":    provider.noise_level or "",
-        "website":        provider.website or "",
-        "contact_email":  provider.contact_email or "",
+        "noise_level":     provider.noise_level or "",
+        "website":         provider.website or "",
+        "contact_email":   provider.contact_email or "",
         "vibe_description": vibe_description,
     }
-
-    # Store taxonomy tags as flat comma-separated strings for Python-side filtering
     for tag_name, values in (tags or {}).items():
         metadata[f"tag_{tag_name}"] = ",".join(values)
 
-    col.upsert(ids=[provider.id], documents=[doc], metadatas=[metadata])
+    entry = {"id": provider.id, "embedding": embedding, "metadata": metadata}
+    idx = next((i for i, e in enumerate(store) if e["id"] == provider.id), None)
+    if idx is not None:
+        store[idx] = entry
+    else:
+        store.append(entry)
+
+    _save_store(store)
 
 
 def query_providers(query: str, city_filter: str | None, limit: int) -> list[dict]:
-    col = _get_collection()
-    where = {"city": city_filter} if city_filter else None
-    results = col.query(
-        query_texts=[query],
-        n_results=min(limit, col.count()),
-        where=where,
-        include=["metadatas", "distances"],
-    )
-    out = []
-    for meta, dist in zip(results["metadatas"][0], results["distances"][0]):
-        score = max(0.0, 1.0 - dist)
-        out.append({"metadata": meta, "score": score})
-    return out
+    store = _load_store()
+    if not store:
+        return []
+
+    query_embedding = _embed(query)
+
+    results = []
+    for entry in store:
+        meta = entry["metadata"]
+        if city_filter and meta.get("city") != city_filter:
+            continue
+        score = _cosine(query_embedding, entry["embedding"])
+        results.append({"metadata": meta, "score": score})
+
+    results.sort(key=lambda x: x["score"], reverse=True)
+    return results[:limit]
